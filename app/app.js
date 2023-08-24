@@ -14,6 +14,7 @@ const yearGroupRouter = require("../routes/academics/yearGroups");
 const teacherRouter = require("../routes/staff/teacherRouter");
 const examsRouter = require("../routes/academics/examRoute");
 const studentRouter = require("../routes/students/studentRouter");
+const questionRouter = require("../routes/academics/questionRoute");
 
 const app = express();
 
@@ -38,6 +39,7 @@ app.use("/api/v1/year-groups", yearGroupRouter);
 app.use("/api/v1/teachers", teacherRouter);
 app.use("/api/v1/exams", examsRouter);
 app.use("/api/v1/students", studentRouter);
+app.use("/api/v1/questions", questionRouter);
 
 //Error Middleware
 app.use(notFound);

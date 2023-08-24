@@ -1,5 +1,6 @@
-const verifyToken = require("../utils/verifyToken");
 const Student = require("../models/academic/Student");
+
+const verifyToken = require("../utils/verifyToken");
 
 const isStudentLoggedIn = async (req, res, next) => {
   // Get Token From Heder
