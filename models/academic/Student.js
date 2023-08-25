@@ -37,7 +37,7 @@ const studentSchema = new mongoose.Schema(
     //keep track of the class level the student is in
     classLevels: [
       {
-        type: mongoose.Schema.Types.ObjectId,
+        type: String,
         ref: "ClassLevel",
       },
     ],
