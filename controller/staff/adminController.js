@@ -13,7 +13,7 @@ const {
 // Route POST api/admins/register
 // access = Private
 const registerAdmin = asyncHandler(async (req, res) => {
-  const { name, email, password } = req.body;
+  const { name, email, password, phoneNumber } = req.body;
 
   //check if Admin exist
   const adminExist = await Admin.findOne({ email });
@@ -25,6 +25,7 @@ const registerAdmin = asyncHandler(async (req, res) => {
   const user = await Admin.create({
     name,
     email,
+    phoneNumber,
     password: await hashedPassword(password),
   });
   res.status(201).json({
@@ -68,7 +69,9 @@ const allAdmins = asyncHandler(async (req, res) => {});
 // Route GET api/admins/:id
 // access = Private
 const getAdminProfileCtrl = asyncHandler(async (req, res) => {
-  const admin = await Admin.findById(req.userAuth._id).select('-password').populate('academicYears');
+  const admin = await Admin.findById(req.userAuth._id)
+    .select("-password")
+    .populate("academicYears");
   if (!admin) {
     throw new Error("Admin not found");
   } else {

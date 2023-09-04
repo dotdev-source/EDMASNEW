@@ -1,30 +1,21 @@
-const bcrypt = require("bcryptjs");
-
 const mongoose = require("mongoose");
-const adminSchema = new mongoose.Schema(
+const schoolSchema = new mongoose.Schema(
   {
-    name: {
+    schoolName: {
       type: String,
       required: true,
     },
-    email: {
+    schoolType: {
       type: String,
       required: true,
     },
-    password: {
+    regNo: {
+      type: String,
+    },
+    schoolAdress: {
       type: String,
       required: true,
     },
-    role: {
-      type: String,
-      default: "admin",
-    },
-    school: [
-      {
-        type: mongoose.Schema.Types.ObjectId,
-        ref: "School",
-      },
-    ],
     academicTerms: [
       {
         type: mongoose.Schema.Types.ObjectId,
@@ -73,24 +64,6 @@ const adminSchema = new mongoose.Schema(
   }
 );
 
-// //Hash password
-// adminSchema.pre("save", async function (next) {
-//   if (!this.isModified('password')) {
-//     next();
-//   }
-//   //Salt
-//   const salt = await bcrypt.genSalt(10);
-//   this.password = await bcrypt.hash(this.password, salt);
+const School = mongoose.model("School", schoolSchema);
 
-//   next();
-// });
-
-// // Verify Password
-// adminSchema.methods.verifiedPassword = async function (enteredPassword) {
-// return await bcrypt.compare(enteredPassword, this.password)
-// }
-
-//model
-const Admin = mongoose.model("Admin", adminSchema);
-
-module.exports = Admin;
+module.exports = School;
