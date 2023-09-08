@@ -1,5 +1,4 @@
 const asyncHandler = require("express-async-handler");
-const bcrypt = require("bcryptjs");
 const Admin = require("../../models/staff/Admin");
 const generateToken = require("../../utils/generateToken");
 const verifyToken = require("../../utils/verifyToken");
@@ -13,7 +12,7 @@ const {
 // Route POST api/admins/register
 // access = Private
 const registerAdmin = asyncHandler(async (req, res) => {
-  const { name, email, password, phoneNumber } = req.body;
+  const { fullname, email, password, phoneNumber } = req.body;
 
   //check if Admin exist
   const adminExist = await Admin.findOne({ email });
@@ -23,7 +22,7 @@ const registerAdmin = asyncHandler(async (req, res) => {
 
   //Register Admin
   const user = await Admin.create({
-    name,
+    fullname,
     email,
     phoneNumber,
     password: await hashedPassword(password),

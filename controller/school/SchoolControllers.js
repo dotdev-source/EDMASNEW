@@ -1,5 +1,6 @@
 const asyncHandler = require("express-async-handler");
 const School = require("../../models/school/School");
+const Admin = require("../../models/staff/Admin");
 
 // Register School
 // Route POST api/schools/register
@@ -14,15 +15,21 @@ const registerSchool = asyncHandler(async (req, res) => {
   }
 
   //Register School
-  const school = await School.create({
+  const schoolCreated = await School.create({
     schoolName,
     schoolType,
     regNo,
     schoolAddress,
   });
+
+   //Push Academic Year into Admin
+   const admin = await Admin.findById(req.userAuth._id);
+   admin.schools.push(schoolCreated._id);
+  await admin.save();
+  
   res.status(201).json({
     status: "success",
-    data: school,
+    data: schoolCreated,
     message: "School created successfully",
   });
 });
@@ -33,7 +40,7 @@ const registerSchool = asyncHandler(async (req, res) => {
 // Route GET api/schools/
 // access = Private
 const allSchools = asyncHandler(async (req, res) => {
-    schools = await School.find()
+  const schools = await School.find()
 
     res.status(200).json({
         status: 'success',
