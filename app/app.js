@@ -6,6 +6,7 @@ const {
   notFound,
 } = require("../middlewares/globalErrorHandler");
 const adminRouter = require("../routes/staff/adminRouter");
+const schoolRouter = require("../routes/school/schoolRouter");
 const academicYearRouter = require("../routes/academics/academicYear");
 const academicTermRouter = require("../routes/academics/academicTerm");
 const ClassLevelRouter = require("../routes/academics/classLevel");
@@ -32,6 +33,7 @@ app.use((req, res, next) => {
 
 //Routes
 app.use("/api/v1/admins", adminRouter);
+app.use("/api/v1/schools", schoolRouter);
 app.use("/api/v1/academic-years", academicYearRouter);
 app.use("/api/v1/academic-terms", academicTermRouter);
 app.use("/api/v1/class-levels", ClassLevelRouter);
