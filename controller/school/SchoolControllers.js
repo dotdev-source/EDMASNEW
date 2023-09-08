@@ -9,7 +9,7 @@ const createSchool = asyncHandler(async (req, res) => {
   const { schoolName, schoolType, regNo, schoolAddress } = req.body;
 
   //check if School exist
-  const schoolExist = await School.findOne({ email });
+  const schoolExist = await School.findOne({ schoolName });
   if (schoolExist) {
     throw new Error("School Already Exist");
   }
@@ -22,19 +22,17 @@ const createSchool = asyncHandler(async (req, res) => {
     schoolAddress,
   });
 
-   //Push Academic Year into Admin
-   const admin = await Admin.findById(req.userAuth._id);
-   admin.schools.push(schoolCreated._id);
+  //Push Academic Year into Admin
+  const admin = await Admin.findById(req.userAuth._id);
+  admin.schools.push(schoolCreated);
   await admin.save();
-  
+
   res.status(201).json({
     status: "success",
     data: schoolCreated,
     message: "School created successfully",
   });
 });
-
-
 
 // // Get All School
 // // Route GET api/schools/
@@ -93,12 +91,10 @@ const createSchool = asyncHandler(async (req, res) => {
 // Route DELETE api/schools/:id
 // access = Private
 
-
-
 module.exports = {
   createSchool,
   // allSchools,
   // getSchoolProfileCtrl,
   // updateSchool,
   // deleteSchool,
-}
+};

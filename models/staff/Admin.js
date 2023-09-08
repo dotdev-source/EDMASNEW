@@ -23,7 +23,7 @@ const adminSchema = new mongoose.Schema(
       type: String,
       default: "admin",
     },
-    school: [
+    schools: [
       {
         type: mongoose.Schema.Types.ObjectId,
         ref: "School",

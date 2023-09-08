@@ -6,7 +6,6 @@ const {
   notFound,
 } = require("../middlewares/globalErrorHandler");
 const adminRouter = require("../routes/staff/adminRouter");
-const schoolRouter = require("../routes/school/schoolRouter");
 const academicYearRouter = require("../routes/academics/academicYear");
 const academicTermRouter = require("../routes/academics/academicTerm");
 const ClassLevelRouter = require("../routes/academics/classLevel");
@@ -17,6 +16,7 @@ const teacherRouter = require("../routes/staff/teacherRouter");
 const examsRouter = require("../routes/academics/examRoute");
 const studentRouter = require("../routes/students/studentRouter");
 const questionRouter = require("../routes/academics/questionRoute");
+const schoolRouter = require("../routes/school/schoolRouter");
 
 const app = express();
 

@@ -3,7 +3,7 @@ const schoolSchema = new mongoose.Schema(
   {
     schoolName: {
       type: String,
-      required: true,
+      // required: true,
     },
     schoolType: {
       type: String,
@@ -12,9 +12,9 @@ const schoolSchema = new mongoose.Schema(
     regNo: {
       type: String,
     },
-    schoolAdress: {
+    schoolAddress: {
       type: String,
-      required: true,
+      // required: true,
     },
     academicTerms: [
       {

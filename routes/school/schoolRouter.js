@@ -1,13 +1,13 @@
 const express = require("express");
 const app = require("../../app/app");
-const {createSchool} = require("../../controller/school/SchoolControllers");
+const { createSchool } = require("../../controller/school/SchoolControllers");
 const isLoggedIn = require("../../middlewares/isLoggedIn");
 const isAdmin = require("../../middlewares/isAdmin");
 
 const schoolRouter = express.Router();
 
 //Create School
-schoolRouter.post("admin/register", createSchool);
+schoolRouter.post("/create", createSchool);
 
 // //Admin Login
 // adminRouter.post("/login", adminLogin);
