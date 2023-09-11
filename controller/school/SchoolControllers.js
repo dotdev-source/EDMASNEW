@@ -23,9 +23,9 @@ const createSchool = asyncHandler(async (req, res) => {
   });
 
   //Push Academic Year into Admin
-  const admin = await Admin.findById(req.userAuth._id);
-  admin.schools.push(schoolCreated);
-  await admin.save();
+  // const admin = await Admin.findById(req.userAuth._id);
+  // admin.schools.push(schoolCreated);
+  // await admin.save();
 
   res.status(201).json({
     status: "success",
