@@ -3,6 +3,8 @@ const app = require("../../app/app");
 const {
   registerAdmin,
   adminLogin,
+  refreshToken,
+  adminLogout,
   allAdmins,
   getAdminProfileCtrl,
   updateAdmin,
@@ -25,6 +27,12 @@ adminRouter.post("/register", registerAdmin);
 
 //Admin Login
 adminRouter.post("/login", adminLogin);
+
+//Refrestoken
+adminRouter.post("/refresh", refreshToken);
+
+adminRouter.post("/logout", adminLogout);
+
 
 //Get All Admin
 adminRouter.get("/", isLoggedIn, allAdmins);

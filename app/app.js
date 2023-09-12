@@ -33,7 +33,7 @@ app.use((req, res, next) => {
 });
 
 //Routes
-app.use("/api/v1/admins", adminRouter);
+app.use("/api/v1/admin", adminRouter);
 app.use("/api/v1/schools", schoolRouter);
 app.use("/api/v1/academic-years", academicYearRouter);
 app.use("/api/v1/academic-terms", academicTermRouter);
