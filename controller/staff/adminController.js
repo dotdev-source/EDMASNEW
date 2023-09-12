@@ -30,6 +30,7 @@ const registerAdmin = asyncHandler(async (req, res) => {
   res.status(201).json({
     status: "success",
     data: user,
+  
     message: "Admin created successfully",
   });
 });

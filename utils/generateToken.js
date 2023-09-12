@@ -8,4 +8,4 @@ const refreshToken = (id) => {
   return jwt.sign({ id }, "anykey", { expiresIn: "90d" });
 };
 
-module.exports = generateToken;
+module.exports = {generateToken, refreshToken};

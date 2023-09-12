@@ -16,6 +16,7 @@ const {
 } = require("../../controller/staff/adminController");
 const isLoggedIn = require('../../middlewares/isLoggedIn');
 const isAdmin = require("../../middlewares/isAdmin");
+const loginLimiter = require("../../middlewares/loginLimiter")
 
 const adminRouter = express.Router();
 
