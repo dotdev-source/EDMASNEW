@@ -1,11 +1,13 @@
 const express = require("express");
 const morgan = require("morgan");
 const cors = require("cors");
-const corsOptions = require('../config/corsOptions')
+const corsOptions = require("../config/corsOptions");
+const cookieParser = require("cookie-parser");
 const {
   globalErrorHandler,
   notFound,
 } = require("../middlewares/globalErrorHandler");
+const authRoutes = require("../routes/authRoutes/authRoutes");
 const adminRouter = require("../routes/staff/adminRouter");
 const academicYearRouter = require("../routes/academics/academicYear");
 const academicTermRouter = require("../routes/academics/academicTerm");
@@ -24,7 +26,8 @@ const app = express();
 //Middleware
 app.use(morgan("dev"));
 app.use(express.json());
-app.use(cors(corsOptions))
+app.use(cors(corsOptions));
+app.use(cookieParser());
 app.use((req, res, next) => {
   // console.log('Middleware', req);
   console.log(`${req.method} ${req.originalUrl}`);
@@ -33,6 +36,7 @@ app.use((req, res, next) => {
 });
 
 //Routes
+app.use("/auth", authRoutes);
 app.use("/api/v1/admin", adminRouter);
 app.use("/api/v1/schools", schoolRouter);
 app.use("/api/v1/academic-years", academicYearRouter);

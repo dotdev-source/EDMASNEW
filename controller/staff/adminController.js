@@ -1,12 +1,14 @@
 const asyncHandler = require("express-async-handler");
 const Admin = require("../../models/staff/Admin");
-const generateToken = require("../../utils/generateToken");
-const verifyToken = require("../../utils/verifyToken");
-const {
-  passwordHashed,
-  isPasswordMatched,
-  hashedPassword,
-} = require("../../utils/helpers");
+const jwt = require("jsonwebtoken")
+const bcrypt = require("bcryptjs");
+// const generateToken = require("../../utils/generateToken");
+// const verifyToken = require("../../utils/verifyToken");
+// const {
+//   passwordHashed,
+//   isPasswordMatched,
+//   hashedPassword,
+// } = require("../../utils/helpers");
 
 // Register Admin
 // Route POST api/admins/register
@@ -47,7 +49,7 @@ const adminLogin = asyncHandler(async (req, res) => {
 
   const foundUser = await Admin.findOne({ email }).exec();
 
-  if (!foundUser || !foundUser.active) {
+  if (!foundUser ) {
     return res.status(401).json({ message: "Unauthorized" });
   }
 
@@ -58,8 +60,8 @@ const adminLogin = asyncHandler(async (req, res) => {
   const accessToken = jwt.sign(
     {
       UserInfo: {
-        username: foundUser.username,
-        roles: foundUser.roles,
+        email: foundUser.email,
+        role: foundUser.role,
       },
     },
     process.env.ACCESS_TOKEN_SECRET,
@@ -67,7 +69,7 @@ const adminLogin = asyncHandler(async (req, res) => {
   );
 
   const refreshToken = jwt.sign(
-    { username: foundUser.username },
+    { email: foundUser.email },
     process.env.REFRESH_TOKEN_SECRET,
     { expiresIn: "5d" }
   );
@@ -77,11 +79,11 @@ const adminLogin = asyncHandler(async (req, res) => {
     httpOnly: true, //accessible only by web server
     secure: true, //https
     sameSite: "None", //cross-site cookie
-    maxAge: 7 * 24 * 60 * 60 * 1000, //cookie expiry: set to match rT
+    maxAge: 5 * 24 * 60 * 60 * 1000, //cookie expiry: set to match rT
   });
 
   // Send accessToken containing username and roles
-  res.json({ accessToken });
+  res.json({ accessToken, refreshToken});
 
   // //Find the user
   // const user = await Admin.findOne({ email });
@@ -105,40 +107,39 @@ const adminLogin = asyncHandler(async (req, res) => {
 // @desc Refresh
 // @route GET /admin/refresh
 // @access Public - because access token has expired
-const refreshToken = (req, res) => {
-  const cookies = req.cookies;
+const refresh = asyncHandler(async (req, res) => {
+  const cookies = req.cookies
+  console.log(req.cookies)
 
-  if (!cookies?.jwt) return res.status(401).json({ message: "Unauthorized" });
+  if (!cookies?.jwt) return res.status(401).json({ message: 'Unauthorized' })
 
-  const refreshToken = cookies.jwt;
+  const refreshToken = cookies.jwt
 
   jwt.verify(
     refreshToken,
     process.env.REFRESH_TOKEN_SECRET,
     asyncHandler(async (err, decoded) => {
-      if (err) return res.status(403).json({ message: "Forbidden" });
+      if (err) return res.status(403).json({ message: 'Forbidden' })
 
-      const foundUser = await User.findOne({
-        username: decoded.username,
-      }).exec();
+      const foundUser = await Admin.findOne({ email: decoded.email }).exec()
 
-      if (!foundUser) return res.status(401).json({ message: "Unauthorized" });
+      if (!foundUser) return res.status(401).json({ message: 'Unauthorized' })
 
       const accessToken = jwt.sign(
         {
-          UserInfo: {
-            username: foundUser.username,
-            roles: foundUser.roles,
-          },
+          "UserInfo": {
+            "username": foundUser.email,
+            "roles": foundUser.role
+          }
         },
         process.env.ACCESS_TOKEN_SECRET,
-        { expiresIn: "15m" }
-      );
+        { expiresIn: '15m' }
+      )
 
-      res.json({ accessToken });
+      res.json({ accessToken })
     })
-  );
-};
+  )
+});
 
 
 // @desc Logout
@@ -347,7 +348,7 @@ const unpublishExams = (req, res) => {
 module.exports = {
   registerAdmin,
   adminLogin,
-  refreshToken,
+  refresh,
   adminLogout,
   allAdmins,
   getAdminProfileCtrl,

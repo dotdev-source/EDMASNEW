@@ -3,7 +3,7 @@ const app = require("../../app/app");
 const {
   registerAdmin,
   adminLogin,
-  refreshToken,
+  refresh,
   adminLogout,
   allAdmins,
   getAdminProfileCtrl,
@@ -18,7 +18,9 @@ const {
 } = require("../../controller/staff/adminController");
 const isLoggedIn = require('../../middlewares/isLoggedIn');
 const isAdmin = require("../../middlewares/isAdmin");
-const loginLimiter = require("../../middlewares/loginLimiter")
+const loginLimiter = require("../../middlewares/loginLimiter");
+const verifyJWT = require("../../middlewares/verifyJWT");
+
 
 const adminRouter = express.Router();
 
@@ -26,13 +28,14 @@ const adminRouter = express.Router();
 adminRouter.post("/register", registerAdmin);
 
 //Admin Login
-adminRouter.post("/login", adminLogin);
+adminRouter.post("/login", loginLimiter, adminLogin);
 
 //Refrestoken
-adminRouter.post("/refresh", refreshToken);
+adminRouter.get("/refresh", refresh);
 
 adminRouter.post("/logout", adminLogout);
 
+adminRouter.use(verifyJWT);
 
 //Get All Admin
 adminRouter.get("/", isLoggedIn, allAdmins);
