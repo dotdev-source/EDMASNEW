@@ -20,7 +20,7 @@ const studentRouter = express.Router();
 studentRouter.post("/admin/register", isLoggedIn, isAdmin, adminRegisterStudent);
 studentRouter.post("/login", studentLogin);
 studentRouter.get("/profile", isStudentLoggedIn, isStudent, getStudentProfile);
-studentRouter.get("/", isLoggedIn, isAdmin, getAllStudentByAdmin);
+studentRouter.get("/", getAllStudentByAdmin);
 studentRouter.get("/:studentId/admin", isLoggedIn, isAdmin, getStudentByAdmin);
 studentRouter.put("/:studentId/update/admin", isLoggedIn, isAdmin, adminUpdateStudent);
 studentRouter.post("/exam/:examID/write", isStudentLoggedIn, isStudent, writeExam);

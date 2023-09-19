@@ -1,6 +1,6 @@
 const asyncHandler = require("express-async-handler");
 const Admin = require("../../models/staff/Admin");
-const jwt = require("jsonwebtoken")
+const jwt = require("jsonwebtoken");
 const bcrypt = require("bcryptjs");
 // const generateToken = require("../../utils/generateToken");
 // const verifyToken = require("../../utils/verifyToken");
@@ -17,7 +17,7 @@ const registerAdmin = asyncHandler(async (req, res) => {
   const { fullname, email, password, phoneNumber } = req.body;
 
   //check if Admin exist
-  const adminExist = await Admin.findOne({ email });
+  const adminExist = await Admin.findOne({ email }).collation({locale: 'en', strength: 2}).lean().exec(); 
   if (adminExist) {
     throw new Error("Admin Exist");
   }
@@ -49,7 +49,7 @@ const adminLogin = asyncHandler(async (req, res) => {
 
   const foundUser = await Admin.findOne({ email }).exec();
 
-  if (!foundUser ) {
+  if (!foundUser) {
     return res.status(401).json({ message: "Unauthorized" });
   }
 
@@ -83,7 +83,7 @@ const adminLogin = asyncHandler(async (req, res) => {
   });
 
   // Send accessToken containing username and roles
-  res.json({ accessToken, refreshToken});
+  res.json({ accessToken });
 
   // //Find the user
   // const user = await Admin.findOne({ email });
@@ -108,49 +108,48 @@ const adminLogin = asyncHandler(async (req, res) => {
 // @route GET /admin/refresh
 // @access Public - because access token has expired
 const refresh = asyncHandler(async (req, res) => {
-  const cookies = req.cookies
-  console.log(req.cookies)
+  const cookies = req.cookies;
+  console.log(req.cookies);
 
-  if (!cookies?.jwt) return res.status(401).json({ message: 'Unauthorized' })
+  if (!cookies?.jwt) return res.status(401).json({ message: "Unauthorized" });
 
-  const refreshToken = cookies.jwt
+  const refreshToken = cookies.jwt;
 
   jwt.verify(
     refreshToken,
     process.env.REFRESH_TOKEN_SECRET,
     asyncHandler(async (err, decoded) => {
-      if (err) return res.status(403).json({ message: 'Forbidden' })
+      if (err) return res.status(403).json({ message: "Forbidden" });
 
-      const foundUser = await Admin.findOne({ email: decoded.email }).exec()
+      const foundUser = await Admin.findOne({ email: decoded.email }).exec();
 
-      if (!foundUser) return res.status(401).json({ message: 'Unauthorized' })
+      if (!foundUser) return res.status(401).json({ message: "Unauthorized" });
 
       const accessToken = jwt.sign(
         {
-          "UserInfo": {
-            "username": foundUser.email,
-            "roles": foundUser.role
-          }
+          UserInfo: {
+            username: foundUser.email,
+            roles: foundUser.role,
+          },
         },
         process.env.ACCESS_TOKEN_SECRET,
-        { expiresIn: '15m' }
-      )
+        { expiresIn: "15m" }
+      );
 
-      res.json({ accessToken })
+      res.json({ accessToken });
     })
-  )
+  );
 });
-
 
 // @desc Logout
 // @route POST /admin/logout
 // @access Public - just to clear cookie if exists
 const adminLogout = (req, res) => {
-  const cookies = req.cookies
-  if (!cookies?.jwt) return res.sendStatus(204) //No content
-  res.clearCookie('jwt', { httpOnly: true, sameSite: 'None', secure: true })
-  res.json({ message: 'Cookie cleared' })
-}
+  const cookies = req.cookies;
+  if (!cookies?.jwt) return res.sendStatus(204); //No content
+  res.clearCookie("jwt", { httpOnly: true, sameSite: "None", secure: true });
+  res.json({ message: "Cookie cleared" });
+};
 
 // Get All Admin
 // Route GET api/admins/

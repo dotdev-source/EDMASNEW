@@ -19,7 +19,7 @@ const {
 const isLoggedIn = require('../../middlewares/isLoggedIn');
 const isAdmin = require("../../middlewares/isAdmin");
 const loginLimiter = require("../../middlewares/loginLimiter");
-const verifyJWT = require("../../middlewares/verifyJWT");
+const verifyJWT = require("../../middlewares/verufyJWT");
 
 
 const adminRouter = express.Router();

@@ -5,7 +5,7 @@ const loginLimiter = require("../../middlewares/loginLimiter");
 
 const authRoutes = express.Router();
 
-authRoutes.post('/login', loginLimiter, authController.login);
+authRoutes.post('/', loginLimiter, authController.login);
 
 authRoutes.route("/refresh").get(authController.refresh);
 
